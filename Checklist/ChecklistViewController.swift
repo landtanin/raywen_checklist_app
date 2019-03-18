@@ -29,31 +29,35 @@ class ChecklistViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "ChecklistItem", for: indexPath)
     
-    if let label = cell.viewWithTag(1000) as? UILabel {
-      
-      label.text = todoList.todos[indexPath.row].text
-      
-    }
-    configureCheckmark(for: cell, at: indexPath)
+    let item = todoList.todos[indexPath.row]
+    configureText(for: cell, with: item)
+    configureCheckmark(for: cell, with: item)
     
     return cell
+  }
+  
+  func configureText(for cell: UITableViewCell, with item: ChecklistItem) {
+    if let label = cell.viewWithTag(1000) as? UILabel {
+      label.text = item.text
+    }
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
     if let cell = tableView.cellForRow(at: indexPath) {
-      configureCheckmark(for: cell, at: indexPath)
+      let item = todoList.todos[indexPath.row]
+      configureCheckmark(for: cell, with: item)
       tableView.deselectRow(at: indexPath, animated: true)
     }
   }
   
-  private func configureCheckmark(for cell: UITableViewCell, at indexPath: IndexPath) {
-    if todoList.todos[indexPath.row].checked {
+  private func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem) {
+    if item.checked {
       cell.accessoryType = .none
     } else {
       cell.accessoryType = .checkmark
     }
-    todoList.todos[indexPath.row].checked = !todoList.todos[indexPath.row].checked
+    item.toggleChecked()
     
   }
   
