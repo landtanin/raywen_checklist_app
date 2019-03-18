@@ -19,7 +19,17 @@ class ChecklistViewController: UITableViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
+    navigationController?.navigationBar.prefersLargeTitles = true
+  }
+  
+  @IBAction func addItem(_ sender: UIBarButtonItem) {
+    
+    let newRowIndex = todoList.todos.count
+    _ = todoList.newTodo()
+    
+    let indexPath = IndexPath(row: newRowIndex, section: 0)
+    tableView.insertRows(at: [indexPath], with: .automatic)
+    
   }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -51,11 +61,13 @@ class ChecklistViewController: UITableViewController {
     }
   }
   
+  // there is a bug here 
   private func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem) {
+    
     if item.checked {
-      cell.accessoryType = .none
-    } else {
       cell.accessoryType = .checkmark
+    } else {
+      cell.accessoryType = .none
     }
     item.toggleChecked()
     
