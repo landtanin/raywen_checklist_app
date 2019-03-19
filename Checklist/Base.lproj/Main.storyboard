@@ -49,7 +49,7 @@
                     <navigationItem key="navigationItem" title="Checklists" id="mPo-Kj-NIK">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="uGe-dO-HQ8">
                             <connections>
-                                <action selector="addItem:" destination="Ezi-CT-AlY" id="JYZ-FZ-XFN"/>
+                                <segue destination="6Gk-yU-g15" kind="show" id="y3H-RU-R9B"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -58,6 +58,46 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xaV-EP-CYR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="838" y="99"/>
+        </scene>
+        <!--Title-->
+        <scene sceneID="7K5-xr-YiS">
+            <objects>
+                <tableViewController id="6Gk-yU-g15" customClass="AddItemTableViewController" customModule="Checklist" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="4gQ-bK-X2Y">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="tyn-D9-bwR">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tyn-D9-bwR" id="LCq-Ns-5V7">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="6Gk-yU-g15" id="Eb4-ab-e8e"/>
+                            <outlet property="delegate" destination="6Gk-yU-g15" id="pa1-Wo-KLh"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Title" id="6f4-ed-jFC">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="zG4-o9-ToR">
+                            <connections>
+                                <action selector="cancelBtn:" destination="6Gk-yU-g15" id="fu7-IW-GwD"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Add" id="lcD-K0-StJ">
+                            <connections>
+                                <action selector="addBtn:" destination="6Gk-yU-g15" id="Lvd-Iv-RR8"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Zvj-QL-xs8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1718" y="99"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="pHg-Ci-bT4">
