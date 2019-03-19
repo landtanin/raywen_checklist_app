@@ -83,6 +83,9 @@
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardAppearance="alert" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                    <connections>
+                                                        <action selector="addBtn:" destination="6Gk-yU-g15" eventType="editingDidEndOnExit" id="QkC-iD-mYW"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -101,13 +104,15 @@
                                 <action selector="cancelBtn:" destination="6Gk-yU-g15" id="fu7-IW-GwD"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Add" id="lcD-K0-StJ">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Add" id="lcD-K0-StJ">
                             <connections>
                                 <action selector="addBtn:" destination="6Gk-yU-g15" id="Lvd-Iv-RR8"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addBarBtn" destination="lcD-K0-StJ" id="pVM-A6-rwS"/>
+                        <outlet property="cancelBarBtn" destination="zG4-o9-ToR" id="ljS-QR-n1H"/>
                         <outlet property="textField" destination="idB-il-xXk" id="PL0-4u-5oS"/>
                     </connections>
                 </tableViewController>

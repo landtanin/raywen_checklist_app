@@ -11,13 +11,15 @@ import UIKit
 class AddItemTableViewController: UITableViewController {
   
   @IBOutlet weak var textField: UITextField!
+  @IBOutlet weak var addBarBtn: UIBarButtonItem!
+  @IBOutlet weak var cancelBarBtn: UIBarButtonItem!
   
   @IBAction func cancelBtn(_ sender: Any) {
     navigationController?.popViewController(animated: true)
   }
   
   @IBAction func addBtn(_ sender: Any) {
-    print("Contents of the text field \(textField.text)")
+    navigationController?.popViewController(animated: true)
   }
   
   override func viewDidLoad() {
@@ -43,6 +45,24 @@ extension AddItemTableViewController: UITextFieldDelegate {
     // This will dismiss the keyboard
     textField.resignFirstResponder()
     return false
+  }
+ 
+  func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    
+    guard let oldText = textField.text,
+          let stringRange = Range(range, in: oldText) else {
+        return false
+    }
+    
+    let newText = oldText.replacingCharacters(in: stringRange, with: string)
+    if newText.isEmpty {
+      addBarBtn.isEnabled = false
+    } else {
+      addBarBtn.isEnabled = true
+    }
+    
+    return true
+    
   }
   
 }
