@@ -18,27 +18,38 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="ChecklistItem" id="PWh-8k-itV">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="detailDisclosureButton" indentationWidth="10" reuseIdentifier="ChecklistItem" id="PWh-8k-itV">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PWh-8k-itV" id="91R-fa-mIL">
-                                    <rect key="frame" x="0.0" y="0.0" width="335" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="307" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a09-6Z-KeJ">
-                                            <rect key="frame" x="8" y="5" width="319" height="33.5"/>
+                                            <rect key="frame" x="43" y="4" width="256" height="34.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="√" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ncp-fA-bi7">
+                                            <rect key="frame" x="16" y="11.5" width="13" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="a09-6Z-KeJ" firstAttribute="top" secondItem="91R-fa-mIL" secondAttribute="top" priority="750" constant="5" id="PEa-SF-345"/>
+                                        <constraint firstItem="Ncp-fA-bi7" firstAttribute="centerY" secondItem="91R-fa-mIL" secondAttribute="centerY" id="1PJ-Vb-JGV"/>
+                                        <constraint firstItem="Ncp-fA-bi7" firstAttribute="leading" secondItem="91R-fa-mIL" secondAttribute="leading" constant="16" id="GGg-qs-eVW"/>
+                                        <constraint firstItem="a09-6Z-KeJ" firstAttribute="top" secondItem="91R-fa-mIL" secondAttribute="top" priority="750" constant="4" id="PEa-SF-345"/>
                                         <constraint firstAttribute="trailing" secondItem="a09-6Z-KeJ" secondAttribute="trailing" constant="8" id="ajL-N2-g1H"/>
                                         <constraint firstAttribute="bottom" secondItem="a09-6Z-KeJ" secondAttribute="bottom" constant="5" id="bYW-wV-iWe"/>
-                                        <constraint firstItem="a09-6Z-KeJ" firstAttribute="leading" secondItem="91R-fa-mIL" secondAttribute="leading" constant="8" id="wB2-OC-G1Q"/>
+                                        <constraint firstItem="a09-6Z-KeJ" firstAttribute="leading" secondItem="91R-fa-mIL" secondAttribute="leading" constant="43" id="wB2-OC-G1Q"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="6Gk-yU-g15" kind="show" identifier="EditItemSegue" trigger="accessoryAction" id="X88-e1-glg"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -49,7 +60,7 @@
                     <navigationItem key="navigationItem" title="Checklists" id="mPo-Kj-NIK">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="uGe-dO-HQ8">
                             <connections>
-                                <segue destination="6Gk-yU-g15" kind="show" id="y3H-RU-R9B"/>
+                                <segue destination="6Gk-yU-g15" kind="show" identifier="AddItemSegue" id="y3H-RU-R9B"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -57,7 +68,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xaV-EP-CYR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="838" y="99"/>
+            <point key="canvasLocation" x="837.60000000000002" y="98.50074962518741"/>
         </scene>
         <!--Title-->
         <scene sceneID="7K5-xr-YiS">
@@ -139,4 +150,7 @@
             <point key="canvasLocation" x="45.600000000000001" y="98.50074962518741"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="X88-e1-glg"/>
+    </inferredMetricsTieBreakers>
 </document>

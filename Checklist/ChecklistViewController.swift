@@ -71,14 +71,46 @@ class ChecklistViewController: UITableViewController {
   // there is a bug here 
   private func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem) {
     
+    guard let checkMark = cell.viewWithTag(1001) as? UILabel else {
+      return
+    }
+    
     if item.checked {
-      cell.accessoryType = .checkmark
+      checkMark.text = "√"
     } else {
-      cell.accessoryType = .none
+      checkMark.text = ""
     }
     item.toggleChecked()
     
   }
   
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    
+    if segue.identifier == "AddItemSegue" {
+      
+      if let addItemViewController = segue.destination as? AddItemTableViewController {
+        addItemViewController.delegate = self
+      }
+      
+    }
+    
+  }
+  
 }
 
+extension ChecklistViewController: AddItemTableViewControllerDelegate {
+  func addItemViewControllerDidCancel(controller: AddItemTableViewController) {
+    navigationController?.popViewController(animated: true)
+  }
+  
+  func addItemViewController(controller: AddItemTableViewController, didFinishAdding item: ChecklistItem) {
+    navigationController?.popViewController(animated: true)
+    
+    let rowIndex = todoList.todos.count
+    todoList.todos.append(item)
+    let indexPath = IndexPath(row: rowIndex, section: 0)
+    tableView.insertRows(at: [indexPath], with: .automatic)
+    
+  }
+  
+}
