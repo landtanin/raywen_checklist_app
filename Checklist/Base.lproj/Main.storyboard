@@ -115,7 +115,7 @@
                                 <action selector="cancelBtn:" destination="6Gk-yU-g15" id="fu7-IW-GwD"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Add" id="lcD-K0-StJ">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Done" id="lcD-K0-StJ">
                             <connections>
                                 <action selector="addBtn:" destination="6Gk-yU-g15" id="Lvd-Iv-RR8"/>
                             </connections>

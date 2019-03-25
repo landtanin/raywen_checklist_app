@@ -16,6 +16,8 @@ protocol AddItemTableViewControllerDelegate: class {
 class AddItemTableViewController: UITableViewController {
   
   weak var delegate: AddItemTableViewControllerDelegate?
+  weak var todoList: TodoList?
+  weak var itemToEdit: ChecklistItem?
   
   @IBOutlet weak var textField: UITextField!
   @IBOutlet weak var addBarBtn: UIBarButtonItem!
@@ -38,6 +40,11 @@ class AddItemTableViewController: UITableViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    if let item = itemToEdit {
+      title = "Edit Item"
+      textField.text = item.text
+      addBarBtn.isEnabled = true
+    }
     navigationItem.largeTitleDisplayMode = .never
     textField.delegate = self
   }
