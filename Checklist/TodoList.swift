@@ -50,6 +50,14 @@ class TodoList {
     todos.insert(item, at: index)
   }
   
+  func remove(items: [ChecklistItem]) {
+    for item in items {
+      if let index = todos.firstIndex(of: item) {
+        todos.remove(at: index)
+      }
+    }
+  }
+  
   private func randomName() -> String {
     let titles = ["New todo item", "Generic todo", "Fill me out", "I need something to do", "Much todo about nothing"]
     let randomNumber = Int.random(in: 0...4)

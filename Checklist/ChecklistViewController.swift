@@ -17,10 +17,35 @@ class ChecklistViewController: UITableViewController {
     super.init(coder: aDecoder)
   }
   
+  @IBAction func addItem(_ sender: UIBarButtonItem) {
+    
+    let newRowIndex = todoList.todos.count
+    _ = todoList.newTodo()
+    
+    let indexPath = IndexPath(row: newRowIndex, section: 0)
+    tableView.insertRows(at: [indexPath], with: .automatic)
+    
+  }
+  
+  @IBAction func deleteItems(_ sender: Any) {
+    if let selectedRows = tableView.indexPathsForSelectedRows {
+      var items = [ChecklistItem]()
+      for indexPath in selectedRows {
+        let item = todoList.todos[indexPath.row]
+        items.append(item)
+      }
+      todoList.remove(items: items)
+      tableView.beginUpdates()
+      tableView.deleteRows(at: selectedRows, with: .automatic)
+      tableView.endUpdates()
+    }
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationController?.navigationBar.prefersLargeTitles = true
     navigationItem.leftBarButtonItem = editButtonItem
+    tableView.allowsMultipleSelectionDuringEditing = true
   }
   
   override func setEditing(_ editing: Bool, animated: Bool) {
@@ -31,16 +56,6 @@ class ChecklistViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
     todoList.move(item: todoList.todos[sourceIndexPath.row], to: destinationIndexPath.row)
     tableView.reloadData()
-  }
-  
-  @IBAction func addItem(_ sender: UIBarButtonItem) {
-    
-    let newRowIndex = todoList.todos.count
-    _ = todoList.newTodo()
-    
-    let indexPath = IndexPath(row: newRowIndex, section: 0)
-    tableView.insertRows(at: [indexPath], with: .automatic)
-    
   }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -73,7 +88,9 @@ class ChecklistViewController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    
+    if tableView.isEditing {
+      return
+    }
     if let cell = tableView.cellForRow(at: indexPath) {
       let item = todoList.todos[indexPath.row]
       item.toggleChecked()
