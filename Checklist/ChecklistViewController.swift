@@ -100,6 +100,7 @@ class ChecklistViewController: UITableViewController {
           let indexPath = tableView.indexPath(for: cell) {
           let item = todoList.todos[indexPath.row]
           addItemViewController.itemToEdit = item
+          addItemViewController.delegate = self
         }
       }
     }
@@ -116,10 +117,21 @@ extension ChecklistViewController: AddItemTableViewControllerDelegate {
   func addItemViewController(controller: AddItemTableViewController, didFinishAdding item: ChecklistItem) {
     navigationController?.popViewController(animated: true)
     
-    let rowIndex = todoList.todos.count
-    todoList.todos.append(item)
+    let rowIndex = todoList.todos.count - 1
     let indexPath = IndexPath(row: rowIndex, section: 0)
     tableView.insertRows(at: [indexPath], with: .automatic)
+    
+  }
+  
+  func addItemViewController(controller: AddItemTableViewController, didFinishEditing item: ChecklistItem) {
+    
+    if let index = todoList.todos.index(of: item) {
+      let indexPath = IndexPath(row: index, section: 0)
+      if let cell = tableView.cellForRow(at: indexPath) {
+        configureText(for: cell, with: item)
+      }
+    }
+    navigationController?.popViewController(animated: true)
     
   }
   
