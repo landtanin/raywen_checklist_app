@@ -88,14 +88,14 @@ class ChecklistViewController: UITableViewController {
     
     if segue.identifier == "AddItemSegue" {
       
-      if let addItemViewController = segue.destination as? AddItemTableViewController {
+      if let addItemViewController = segue.destination as? ItemDetailViewController {
         addItemViewController.delegate = self
         addItemViewController.todoList = todoList
       }
       
     } else if segue.identifier == "EditItemSegue" {
       
-      if let addItemViewController = segue.destination as? AddItemTableViewController {
+      if let addItemViewController = segue.destination as? ItemDetailViewController {
         if let cell = sender as? UITableViewCell,
           let indexPath = tableView.indexPath(for: cell) {
           let item = todoList.todos[indexPath.row]
@@ -109,12 +109,12 @@ class ChecklistViewController: UITableViewController {
   
 }
 
-extension ChecklistViewController: AddItemTableViewControllerDelegate {
-  func addItemViewControllerDidCancel(controller: AddItemTableViewController) {
+extension ChecklistViewController: ItemDetailViewControllerDelegate {
+  func itemDetailViewControllerDidCancel(controller: ItemDetailViewController) {
     navigationController?.popViewController(animated: true)
   }
   
-  func addItemViewController(controller: AddItemTableViewController, didFinishAdding item: ChecklistItem) {
+  func itemDetailViewController(controller: ItemDetailViewController, didFinishAdding item: ChecklistItem) {
     navigationController?.popViewController(animated: true)
     
     let rowIndex = todoList.todos.count - 1
@@ -123,7 +123,7 @@ extension ChecklistViewController: AddItemTableViewControllerDelegate {
     
   }
   
-  func addItemViewController(controller: AddItemTableViewController, didFinishEditing item: ChecklistItem) {
+  func itemDetailViewController(controller: ItemDetailViewController, didFinishEditing item: ChecklistItem) {
     
     if let index = todoList.todos.index(of: item) {
       let indexPath = IndexPath(row: index, section: 0)

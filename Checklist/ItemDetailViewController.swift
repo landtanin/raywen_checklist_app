@@ -8,15 +8,15 @@
 
 import UIKit
 
-protocol AddItemTableViewControllerDelegate: class {
-  func addItemViewControllerDidCancel(controller: AddItemTableViewController)
-  func addItemViewController(controller: AddItemTableViewController, didFinishAdding item: ChecklistItem)
-  func addItemViewController(controller: AddItemTableViewController, didFinishEditing item: ChecklistItem)
+protocol ItemDetailViewControllerDelegate: class {
+  func itemDetailViewControllerDidCancel(controller: ItemDetailViewController)
+  func itemDetailViewController(controller: ItemDetailViewController, didFinishAdding item: ChecklistItem)
+  func itemDetailViewController(controller: ItemDetailViewController, didFinishEditing item: ChecklistItem)
 }
 
-class AddItemTableViewController: UITableViewController {
+class ItemDetailViewController: UITableViewController {
   
-  weak var delegate: AddItemTableViewControllerDelegate?
+  weak var delegate: ItemDetailViewControllerDelegate?
   weak var todoList: TodoList?
   weak var itemToEdit: ChecklistItem?
   
@@ -26,21 +26,21 @@ class AddItemTableViewController: UITableViewController {
   
   @IBAction func cancelBtn(_ sender: Any) {
 
-    delegate?.addItemViewControllerDidCancel(controller : self)
+    delegate?.itemDetailViewControllerDidCancel(controller : self)
   }
   
   @IBAction func addBtn(_ sender: Any) {
   
     if let item = itemToEdit, let text = textField.text {
       item.text = text
-      delegate?.addItemViewController(controller: self, didFinishEditing: item)
+      delegate?.itemDetailViewController(controller: self, didFinishEditing: item)
     } else {
       if let item = todoList?.newTodo() {
         if let text = textField.text {
           item.text = text
         }
         item.checked = false
-        delegate?.addItemViewController(controller: self, didFinishAdding: item)
+        delegate?.itemDetailViewController(controller: self, didFinishAdding: item)
       }
     }
     
@@ -68,7 +68,7 @@ class AddItemTableViewController: UITableViewController {
     
 }
 
-extension AddItemTableViewController: UITextFieldDelegate {
+extension ItemDetailViewController: UITextFieldDelegate {
   
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     // This will dismiss the keyboard
