@@ -20,6 +20,17 @@ class ChecklistViewController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationController?.navigationBar.prefersLargeTitles = true
+    navigationItem.leftBarButtonItem = editButtonItem
+  }
+  
+  override func setEditing(_ editing: Bool, animated: Bool) {
+    super.setEditing(editing, animated: true)
+    tableView.setEditing(tableView.isEditing, animated: true)
+  }
+  
+  override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    todoList.move(item: todoList.todos[sourceIndexPath.row], to: destinationIndexPath.row)
+    tableView.reloadData()
   }
   
   @IBAction func addItem(_ sender: UIBarButtonItem) {
@@ -65,6 +76,7 @@ class ChecklistViewController: UITableViewController {
     
     if let cell = tableView.cellForRow(at: indexPath) {
       let item = todoList.todos[indexPath.row]
+      item.toggleChecked()
       configureCheckmark(for: cell, with: item)
       tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -81,7 +93,6 @@ class ChecklistViewController: UITableViewController {
     } else {
       cell.checkmarkLabel.text = ""
     }
-    item.toggleChecked()
     
   }
   
