@@ -54,9 +54,11 @@ class ChecklistViewController: UITableViewController {
   }
   
   func configureText(for cell: UITableViewCell, with item: ChecklistItem) {
-    if let label = cell.viewWithTag(1000) as? UILabel {
-      label.text = item.text
+    
+    if let cell = cell as? CheckListTableViewCell {
+      cell.todoTextLabel.text = item.text
     }
+    
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -68,17 +70,16 @@ class ChecklistViewController: UITableViewController {
     }
   }
   
-  // there is a bug here 
   private func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem) {
     
-    guard let checkMark = cell.viewWithTag(1001) as? UILabel else {
+    guard let cell = cell as? CheckListTableViewCell else {
       return
     }
     
     if item.checked {
-      checkMark.text = "√"
+      cell.checkmarkLabel.text = "√"
     } else {
-      checkMark.text = ""
+      cell.checkmarkLabel.text = ""
     }
     item.toggleChecked()
     
