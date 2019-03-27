@@ -11,7 +11,10 @@ import UIKit
 class ChecklistViewController: UITableViewController {
   
   let todoList: TodoList
-  var tableData: [[ChecklistItem?]?]!
+  
+  private func priorityForSectionIndex(_ index: Int) -> TodoList.Priority? {
+    return TodoList.Priority(rawValue: index)
+  }
   
   required init?(coder aDecoder: NSCoder) {
     todoList = TodoList()
@@ -20,7 +23,7 @@ class ChecklistViewController: UITableViewController {
   
   @IBAction func addItem(_ sender: UIBarButtonItem) {
     
-    let newRowIndex = todoList.todos.count
+    let newRowIndex = todoList.todoList(for: .medium).count
     _ = todoList.newTodo()
     
     let indexPath = IndexPath(row: newRowIndex, section: 0)
@@ -29,15 +32,17 @@ class ChecklistViewController: UITableViewController {
   }
   
   @IBAction func deleteItems(_ sender: Any) {
-    if let selectedRows = tableView.indexPathsForSelectedRows {
+    if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
       var items = [ChecklistItem]()
-      for indexPath in selectedRows {
-        let item = todoList.todos[indexPath.row]
-        items.append(item)
+      for indexPath in selectedIndexPaths {
+        if let priority = priorityForSectionIndex(indexPath.section) {
+          let todos = todoList.todoList(for: priority)
+          let item = todos[indexPath.row]
+          todoList.remove(item, from: priority, at: indexPath.row)
+        }
       }
-      todoList.remove(items: items)
       tableView.beginUpdates()
-      tableView.deleteRows(at: selectedRows, with: .automatic)
+      tableView.deleteRows(at: selectedIndexPaths, with: .automatic)
       tableView.endUpdates()
     }
   }
@@ -47,19 +52,6 @@ class ChecklistViewController: UITableViewController {
     navigationController?.navigationBar.prefersLargeTitles = true
     navigationItem.leftBarButtonItem = editButtonItem
     tableView.allowsMultipleSelectionDuringEditing = true
-    
-    let sectionTitleCount = UILocalizedIndexedCollation.current().sectionTitles.count
-    var allSections = [[ChecklistItem?]?](repeating: nil, count: sectionTitleCount) // create 26 sections
-    var sectionNumber = 0
-    let collation = UILocalizedIndexedCollation.current()
-    for item in todoList.todos {
-      sectionNumber = collation.section(for: item, collationStringSelector: #selector(getter: ChecklistItem.text))
-      if allSections[sectionNumber] == nil {
-        allSections[sectionNumber] = [ChecklistItem?]()
-      }
-      allSections[sectionNumber]!.append(item)
-    }
-    tableData = allSections
   }
   
   override func setEditing(_ editing: Bool, animated: Bool) {
@@ -68,19 +60,23 @@ class ChecklistViewController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-    todoList.move(item: todoList.todos[sourceIndexPath.row], to: destinationIndexPath.row)
+    //    todoList.move(item: todoList.todos[sourceIndexPath.row], to: destinationIndexPath.row)
     tableView.reloadData()
   }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return tableData[section] == nil ? 0 : tableData[section]!.count
+    if let priority = priorityForSectionIndex(section) {
+      return todoList.todoList(for: priority).count
+    }
+    return 0
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "ChecklistItem", for: indexPath)
     
     // let item = todoList.todos[indexPath.row]
-    if let item = tableData[indexPath.section]?[indexPath.row] {
+    if let priority = priorityForSectionIndex(indexPath.section) {
+      let item = todoList.todoList(for: priority)[indexPath.row]
       configureText(for: cell, with: item)
       configureCheckmark(for: cell, with: item)
     }
@@ -90,8 +86,14 @@ class ChecklistViewController: UITableViewController {
   
   override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
     
-    todoList.todos.remove(at: indexPath.row)
-    tableView.deleteRows(at: [indexPath], with: .automatic)
+    if let priority = priorityForSectionIndex(indexPath.section) {
+      
+      let items = todoList.todoList(for: priority)
+      let item = items[indexPath.row]
+      todoList.remove(item, from: priority, at: indexPath.row)
+      
+      tableView.deleteRows(at: [indexPath], with: .automatic)
+    }
     
   }
   
@@ -108,10 +110,13 @@ class ChecklistViewController: UITableViewController {
       return
     }
     if let cell = tableView.cellForRow(at: indexPath) {
-      let item = todoList.todos[indexPath.row]
-      item.toggleChecked()
-      configureCheckmark(for: cell, with: item)
-      tableView.deselectRow(at: indexPath, animated: true)
+      if let priority = priorityForSectionIndex(indexPath.section) {
+        let items = todoList.todoList(for: priority)
+        let item = items[indexPath.row]
+        item.toggleChecked()
+        configureCheckmark(for: cell, with: item)
+        tableView.deselectRow(at: indexPath, animated: true)
+      }
     }
   }
   
@@ -142,8 +147,11 @@ class ChecklistViewController: UITableViewController {
       
       if let addItemViewController = segue.destination as? ItemDetailViewController {
         if let cell = sender as? UITableViewCell,
-          let indexPath = tableView.indexPath(for: cell) {
-          let item = todoList.todos[indexPath.row]
+          let indexPath = tableView.indexPath(for: cell),
+          let priority = priorityForSectionIndex(indexPath.section)
+        {
+          let items = todoList.todoList(for: priority)
+          let item = items[indexPath.row]
           addItemViewController.itemToEdit = item
           addItemViewController.delegate = self
         }
@@ -153,19 +161,7 @@ class ChecklistViewController: UITableViewController {
   }
   
   override  func numberOfSections(in tableView: UITableView) -> Int {
-    return tableData.count
-  }
-  
-  override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-    return UILocalizedIndexedCollation.current().sectionTitles
-  }
-  
-  override func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-    return UILocalizedIndexedCollation.current().section(forSectionIndexTitle: index)
-  }
-  
-  override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    return UILocalizedIndexedCollation.current().sectionTitles[section]
+    return TodoList.Priority.allCases.count
   }
   
 }
