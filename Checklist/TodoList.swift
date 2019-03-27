@@ -88,7 +88,8 @@ class TodoList {
     case .high:
       highPriorityTodos.remove(at: index)
     case .medium:
-      mediumPriorityTodos.remove(at: index)
+      let removedItem = mediumPriorityTodos.remove(at: index)
+      print("removedItem = \(removedItem.text)")
     case .low:
       lowPriorityTodos.remove(at: index)
     case .no:

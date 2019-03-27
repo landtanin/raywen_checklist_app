@@ -33,12 +33,21 @@ class ChecklistViewController: UITableViewController {
   
   @IBAction func deleteItems(_ sender: Any) {
     if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
-      var items = [ChecklistItem]()
       for indexPath in selectedIndexPaths {
+        
         if let priority = priorityForSectionIndex(indexPath.section) {
           let todos = todoList.todoList(for: priority)
-          let item = todos[indexPath.row]
-          todoList.remove(item, from: priority, at: indexPath.row)
+          
+          // TODO: This is wrong. Try delete row 0, 3, 4. Then edit the last remaining row, the text on the edit screen will be diffrent
+          let rowToDelete = indexPath.row > todos.count - 1 ? todos.count - 1 : indexPath.row
+          print("priority = \(priority.rawValue)")
+          print("indexPath.row = \(indexPath.row)")
+          print("todos.count - 1 = \(todos.count - 1)")
+          print("rowToDelete = \(rowToDelete)")
+          
+          let item = todos[rowToDelete]
+          print("item of rowToDelete = \(item.text)")
+          todoList.remove(item, from: priority, at: rowToDelete)
         }
       }
       tableView.beginUpdates()
@@ -174,20 +183,24 @@ extension ChecklistViewController: ItemDetailViewControllerDelegate {
   func itemDetailViewController(controller: ItemDetailViewController, didFinishAdding item: ChecklistItem) {
     navigationController?.popViewController(animated: true)
     
-    let rowIndex = todoList.todos.count - 1
-    let indexPath = IndexPath(row: rowIndex, section: 0)
+    let rowIndex = todoList.todoList(for: .medium).count - 1
+    let indexPath = IndexPath(row: rowIndex, section: TodoList.Priority.medium.rawValue )
     tableView.insertRows(at: [indexPath], with: .automatic)
     
   }
   
   func itemDetailViewController(controller: ItemDetailViewController, didFinishEditing item: ChecklistItem) {
     
-    if let index = todoList.todos.index(of: item) {
-      let indexPath = IndexPath(row: index, section: 0)
-      if let cell = tableView.cellForRow(at: indexPath) {
-        configureText(for: cell, with: item)
+    for priority in TodoList.Priority.allCases {
+      let currentList = todoList.todoList(for: priority)
+      if let index = currentList.firstIndex(of: item) {
+        let indexPath = IndexPath(row: index, section: priority.rawValue)
+        if let cell = tableView.cellForRow(at: indexPath) {
+          configureText(for: cell, with: item)
+        }
       }
     }
+    
     navigationController?.popViewController(animated: true)
     
   }
