@@ -80,6 +80,22 @@ class ChecklistViewController: UITableViewController {
     return 0
   }
   
+  override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    if let priority = priorityForSectionIndex(section) {
+      switch priority {
+      case .high:
+        return "High Priority Todos"
+      case .medium:
+        return "Medium Priority Todos"
+      case .low:
+        return "Low Priority Todos"
+      case .no:
+        return "Someday Priority Todos"
+      }
+    }
+    return nil
+  }
+  
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "ChecklistItem", for: indexPath)
     
