@@ -30,32 +30,73 @@ class ChecklistViewController: UITableViewController {
     tableView.insertRows(at: [indexPath], with: .automatic)
     
   }
+
+  // Original result which has a problem
+  //  @IBAction func deleteItems(_ sender: Any) {
+  //    if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
+  //      for indexPath in selectedIndexPaths {
+  //        if let priority = priorityForSectionIndex(indexPath.section) {
+  //          let todos = todoList.todoList(for: priority)
+  //          let rowToDelete = indexPath.row > todos.count - 1 ? todos.count - 1 : indexPath.row
+  //          let item = todos[rowToDelete]
+  //          todoList.remove(item, from: priority, at: rowToDelete)
+  //        }
+  //      }
+  //      tableView.beginUpdates()
+  //      tableView.deleteRows(at: selectedIndexPaths, with: .automatic)
+  //      tableView.endUpdates()
+  //    }
+  //  }
+  //
   
-  @IBAction func deleteItems(_ sender: Any) {
-    if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
-      for indexPath in selectedIndexPaths {
-        
+  // One way of solving this
+//  @IBAction func deleteItems(_ sender: Any) {
+//    var was: [Int] = []
+//    if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
+//      for indexPath in selectedIndexPaths {
+//        print(indexPath.row)
+//        var actualPath = indexPath
+//        for i in was {
+//          if i < indexPath.row {
+//            actualPath.row -= 1
+//          }
+//        }
+//        was.append(indexPath.row)
+//        if let priority = priorityForSectionIndex(indexPath.section) {
+//          let todos = todoList.todoList(for: priority)
+//          print(todos[actualPath.row].text)
+//          let item = todos[actualPath.row]
+//          todoList.remove(item, from: priority, at: actualPath.row)
+//        }
+//      }
+//      tableView.beginUpdates()
+//      tableView.deleteRows(at: selectedIndexPaths, with: .automatic)
+//      tableView.endUpdates()
+//    }
+//  }
+//
+  
+  // The best solution
+  @IBAction func deleteItems(_ sender: UIBarButtonItem) {
+    if let selectedRows = tableView.indexPathsForSelectedRows?.sorted() {
+      
+      for i in stride(from: selectedRows.count - 1, through: 0, by: -1) {
+        let indexPath = selectedRows[i]
+
         if let priority = priorityForSectionIndex(indexPath.section) {
           let todos = todoList.todoList(for: priority)
-          
-          // TODO: This is wrong. Try delete row 0, 3, 4. Then edit the last remaining row, the text on the edit screen will be diffrent
-          let rowToDelete = indexPath.row > todos.count - 1 ? todos.count - 1 : indexPath.row
-          print("priority = \(priority.rawValue)")
-          print("indexPath.row = \(indexPath.row)")
-          print("todos.count - 1 = \(todos.count - 1)")
-          print("rowToDelete = \(rowToDelete)")
-          
-          let item = todos[rowToDelete]
-          print("item of rowToDelete = \(item.text)")
-          todoList.remove(item, from: priority, at: rowToDelete)
+          let item = todos[indexPath.row]
+
+          todoList.remove(item, from: priority, at: indexPath.row)
         }
       }
+      
       tableView.beginUpdates()
-      tableView.deleteRows(at: selectedIndexPaths, with: .automatic)
+      tableView.deleteRows(at: selectedRows, with: .automatic)
       tableView.endUpdates()
     }
   }
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationController?.navigationBar.prefersLargeTitles = true
