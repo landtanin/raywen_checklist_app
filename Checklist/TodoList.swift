@@ -56,16 +56,32 @@ class TodoList {
     
   }
   
-  func addTodo(_ item: ChecklistItem, for priority: Priority) {
+  func addTodo(_ item: ChecklistItem, for priority: Priority, at index: Int = -1) {
     switch priority {
     case .high:
-      highPriorityTodos.append(item)
+      if index > 0 {
+        highPriorityTodos.insert(item, at: index)
+      } else {
+        highPriorityTodos.append(item)
+      }
     case .medium:
-      mediumPriorityTodos.append(item)
+      if index > 0 {
+        mediumPriorityTodos.insert(item, at: index)
+      } else {
+        mediumPriorityTodos.append(item)
+      }
     case .low:
-      lowPriorityTodos.append(item)
+      if index > 0 {
+        lowPriorityTodos.insert(item, at: index)
+      } else {
+        lowPriorityTodos.append(item)
+      }
     case .no:
-      noPriorityTodos.append(item)
+      if index > 0 {
+        noPriorityTodos.insert(item, at: index)
+      } else {
+        noPriorityTodos.append(item)
+      }
     }
   }
   
@@ -90,12 +106,11 @@ class TodoList {
     return item
   }
   
-  func move(item: ChecklistItem, to index: Int) {
-//    guard let currentIndex = todos.firstIndex(of: item) else {
-//      return
-//    }
-//    todos.remove(at: currentIndex)
-//    todos.insert(item, at: index)
+  func move(_ item: ChecklistItem, from srcPriority: Priority, at srcIndex: Int, to destinationPriority: Priority, at destinationIndex: Int) {
+    
+    remove(item, from: srcPriority, at: srcIndex)
+    addTodo(item, for: destinationPriority, at: destinationIndex)
+    
   }
   
   func remove(_ item: ChecklistItem, from priority: Priority, at index: Int) {
@@ -103,8 +118,7 @@ class TodoList {
     case .high:
       highPriorityTodos.remove(at: index)
     case .medium:
-      let removedItem = mediumPriorityTodos.remove(at: index)
-      print("removedItem = \(removedItem.text)")
+      mediumPriorityTodos.remove(at: index)
     case .low:
       lowPriorityTodos.remove(at: index)
     case .no:
